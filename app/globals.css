@@ -1,42 +1,94 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  font-family: "Arial Rounded MT Bold", sans-serif;
+  background: linear-gradient(
+    135deg,
+    #ffc0cb,
+    #ff99a3
+  ); /* パステルピンク基調 */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* 注文ページ全体 */
+.order-page {
+  width: 100%;
+  height: auto;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* 注文コンテナ */
+.order-container {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #ff6b81;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(255, 107, 129, 0.4);
+  text-align: center;
+}
+
+/* タイトル */
+.order-container h1 {
+  font-size: 2.5rem;
+  color: #ff3b5c;
+  margin-bottom: 20px;
+}
+
+/* 注文フォーム */
+.order-form {
+  text-align: left;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.order-form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ff3b5c;
+  font-weight: bold;
+}
+.order-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ffb6c1;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+}
+.order-form input:focus {
+  border-color: #ff3b5c;
+}
+
+/* 送信ボタン */
+.order-form button {
+  width: 100%;
+  padding: 15px;
+  background: #ff3b5c;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.order-form button:hover {
+  background: #ff6b81;
+}
+
+/* メッセージ表示 */
+.message {
+  margin-top: 15px;
+  font-size: 1rem;
+  color: #ff3b5c;
+  text-align: center;
 }
