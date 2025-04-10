@@ -3,16 +3,17 @@ import { useState } from "react";
 
 export default function OrderPage() {
   const [email, setEmail] = useState("");
-  const [quantity, setQuantity] = useState(1); // 注文数（デフォルトは1）
+  const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
+  const [deliveryType, setDeliveryType] = useState("now"); // "now" or "schedule"
+  const [scheduledTime, setScheduledTime] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
     setOrderNumber("");
 
-    // 入力チェック：メールアドレス必須、注文数は1以上
     if (!email) {
       setMessage("メールアドレスを入力してください。");
       return;
@@ -22,13 +23,22 @@ export default function OrderPage() {
       return;
     }
 
-    // 注文情報の準備：品名は固定で「ベリースウィート苺スムージー」
+    let deliveryTime = "いますぐ希望";
+    if (deliveryType === "schedule") {
+      if (!scheduledTime) {
+        setMessage("受け取り希望時間を入力してください。");
+        return;
+      }
+      deliveryTime = scheduledTime;
+    }
+
     const orderData = {
       email,
       orderItems: {
         product: "苺スムージー",
         quantity: quantity,
       },
+      deliveryTime,
     };
 
     try {
@@ -40,14 +50,12 @@ export default function OrderPage() {
       const data = await res.json();
 
       if (data.success) {
-        // API側ではランダムな4桁の数字で注文番号を発行する前提です。
         setOrderNumber(data.orderNumber);
-        setMessage(
-          "注文が完了しました！ ご注文内容はメールでも送信されています。"
-        );
-        // 注文完了後、入力内容をリセット
+        setMessage("注文が完了しました！ ご注文内容はメールでも送信されています。");
         setEmail("");
         setQuantity(1);
+        setDeliveryType("now");
+        setScheduledTime("");
       } else {
         setMessage("注文に失敗しました: " + data.error);
       }
@@ -61,7 +69,6 @@ export default function OrderPage() {
     <div className="order-page">
       <div className="order-container">
         <h1>苺スムージー注文受付</h1>
-        {/* 商品情報エリア */}
         <div className="product-info">
           <h2>ベリースウィート苺スムージー</h2>
           <img
@@ -69,7 +76,6 @@ export default function OrderPage() {
             src="/IMG_1859.png"
             alt="ベリースウィート苺スムージー"
           />
-
           <p>ご注文は複数個も可能です。ご希望の注文数を入力してください。</p>
         </div>
         <form className="order-form" onSubmit={handleSubmit}>
@@ -94,6 +100,39 @@ export default function OrderPage() {
               onChange={(e) => setQuantity(Number(e.target.value))}
               required
             />
+          </div>
+          <div className="form-group">
+            <p>受け取り希望時間：</p>
+            <label>
+              <input
+                type="radio"
+                name="delivery"
+                value="now"
+                checked={deliveryType === "now"}
+                onChange={() => setDeliveryType("now")}
+              />
+              いますぐ希望
+            </label>
+            <label style={{ marginLeft: "1rem" }}>
+              <input
+                type="radio"
+                name="delivery"
+                value="schedule"
+                checked={deliveryType === "schedule"}
+                onChange={() => setDeliveryType("schedule")}
+              />
+              日時を指定（9:00〜18:00）
+            </label>
+            {deliveryType === "schedule" && (
+              <input
+                type="datetime-local"
+                min="09:00"
+                max="18:00"
+                value={scheduledTime}
+                onChange={(e) => setScheduledTime(e.target.value)}
+                required
+              />
+            )}
           </div>
           <button type="submit">注文する</button>
         </form>
